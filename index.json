@@ -1,6 +1,6 @@
 {
   "name": "Pandentia's cog index",
-  "description": "An assortment of cogs that Pandentia has created"
+  "description": "An assortment of cogs that Pandentia has created",
   "cogs": [
     {
       "name": "Welcome",
