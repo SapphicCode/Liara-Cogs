@@ -5,13 +5,13 @@
     {
       "name": "Welcome",
       "package": "pandentia.welcome",
-      "description": "A welcome cog by Pandentia that utilizes embeds",
+      "description": "A welcome cog that utilizes embeds",
       "url": "https://raw.githubusercontent.com/Pandentia/Liara-Cogs/master/cogs/welcome.py"
     },
     {
       "name": "TempVoice",
       "package": "pandentia.tempvoice",
-      "description": "A cog by Pandentia that has the ability to create temporary (TeamSpeak-like) voice channels",
+      "description": "A cog that has the ability to create temporary (TeamSpeak-like) voice channels",
       "url": "https://raw.githubusercontent.com/Pandentia/Liara-Cogs/master/cogs/tempvoice.py"
     }
   ]
