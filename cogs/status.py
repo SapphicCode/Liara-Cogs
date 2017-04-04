@@ -21,8 +21,9 @@ class Status:
         self.task.cancel()
 
     async def update_loop(self):
+        while self.liara.lockdown:
+            await asyncio.sleep(5)
         while True:
-            await self.liara.wait_for('ready')
             await self.liara.change_presence(status=discord.Status(self.db['status']),
                                              game=discord.Game(name=self.db['game']), afk=True)
             await asyncio.sleep(60)
