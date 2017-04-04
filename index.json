@@ -13,6 +13,12 @@
       "package": "pandentia.tempvoice",
       "description": "A cog that has the ability to create temporary (TeamSpeak-like) voice channels",
       "url": "https://raw.githubusercontent.com/Pandentia/Liara-Cogs/master/cogs/tempvoice.py"
+    },
+    {
+      "name": "Status",
+      "package": "pandentia.status",
+      "description": "A simple cog to persist a bot's status",
+      "url": "https://raw.githubusercontent.com/Pandentia/Liara-Cogs/master/cogs/status.py"
     }
   ]
 }
