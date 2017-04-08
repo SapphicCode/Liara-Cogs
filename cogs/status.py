@@ -21,11 +21,13 @@ class Status:
         self.task.cancel()
 
     async def update_loop(self):
-        while self.liara.lockdown:
-            await asyncio.sleep(5)
         while True:
-            await self.liara.change_presence(status=discord.Status(self.db['status']),
-                                             game=discord.Game(name=self.db['game']), afk=True)
+            await self.liara.wait_until_ready()
+            try:
+                await self.liara.change_presence(status=discord.Status(self.db['status']),
+                                                 game=discord.Game(name=self.db['game']), afk=True)
+            except discord.ConnectionClosed:
+                pass  # I don't even know...
             await asyncio.sleep(60)
 
     @commands.command()
