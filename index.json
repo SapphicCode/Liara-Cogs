@@ -19,6 +19,12 @@
       "package": "pandentia.status",
       "description": "A simple cog to persist a bot's status",
       "url": "https://raw.githubusercontent.com/Pandentia/Liara-Cogs/master/cogs/status.py"
+    },
+    {
+      "name": "TempBans",
+      "package": "pandentia.tempbans",
+      "description": "A cog for temporary bans",
+      "url": "https://raw.githubusercontent.com/Pandentia/Liara-Cogs/master/cogs/tempbans.py"
     }
   ]
 }
