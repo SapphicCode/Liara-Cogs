@@ -31,8 +31,9 @@ class TempBans:
                 if guild is None:
                     continue
                 try:
-                    self.liara.dispatch('pandentia_tempbans_unban', ban['member'])
-                    await guild.unban(await self.get_user(ban['member']))
+                    user = await self.get_user(ban['member'])
+                    self.liara.dispatch('pandentia_tempbans_unban', guild, user)
+                    await guild.unban(user)
                 except discord.DiscordException:
                     pass
                 finally:
