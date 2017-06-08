@@ -23,10 +23,12 @@ class Status:
     async def update_loop(self):
         await self.liara.wait_until_ready()
         while True:
-            if not self.liara.is_closed():
+            try:
                 game = self.db['game']
                 await self.liara.change_presence(status=discord.Status(self.db['status']),
                                                  game=discord.Game(name=game) if game else None, afk=True)
+            except discord.ConnectionClosed:
+                pass
             await asyncio.sleep(60)
 
     @commands.command()
