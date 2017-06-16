@@ -33,7 +33,7 @@ class TempBans:
                 try:
                     user = await self.get_user(ban['member'])
                     self.liara.dispatch('pandentia_tempbans_unban', guild, user)
-                    await guild.unban(user)
+                    await guild.unban(user, reason='Temporary ban expired.')
                 except discord.DiscordException:
                     pass
                 finally:
