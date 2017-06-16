@@ -17,7 +17,7 @@ class TemporaryVoice:
     def filter(channels):
         _channels = []
         for channel in channels:
-            if channel.name.startswith('\U0001d173' * 3):
+            if channel.name.startswith('Temp: '):
                 _channels.append(channel)
         return _channels
 
@@ -27,7 +27,7 @@ class TemporaryVoice:
             guild.default_role: discord.PermissionOverwrite(connect=False),
             member: discord.PermissionOverwrite(connect=True, manage_channels=True, manage_roles=True)
         }
-        channel = await guild.create_voice_channel(('\U0001d173' * 3 + '{}\'s Channel'.format(member.name))[0:32],
+        channel = await guild.create_voice_channel(('Temp: {}\'s Channel'.format(member.name))[0:32],
                                                    overwrites=overwrites)
         self.tracked_channels.add(channel.id)
         await member.move_to(channel)
