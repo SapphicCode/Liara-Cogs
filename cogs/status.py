@@ -27,7 +27,7 @@ class Status:
                 game = self.db['game']
                 await self.liara.change_presence(status=discord.Status(self.db['status']),
                                                  game=discord.Game(name=game) if game else None, afk=True)
-            except discord.ConnectionClosed:
+            except:
                 pass
             await asyncio.sleep(60)
 
