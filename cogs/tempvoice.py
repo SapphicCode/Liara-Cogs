@@ -17,7 +17,7 @@ class TemporaryVoice:
     def filter(channels):
         _channels = []
         for channel in channels:
-            if channel.name.startswith('Temp: '):
+            if channel.name.startswith('Temp: ') or channel.id in self.tracked_channels:
                 _channels.append(channel)
         return _channels
 
