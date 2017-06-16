@@ -61,7 +61,7 @@ class TempBans:
             return
 
         try:
-            await member.ban()
+            await member.ban(reason='Temporary ban: Banned by {} until {}.'.format(ctx.author, parsed))
             self.banlist['bans'].append({'time': parsed, 'member': member.id, 'guild': ctx.guild.id})
         except discord.Forbidden:
             await ctx.send('I don\'t have permission to ban that person here.')
