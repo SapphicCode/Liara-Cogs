@@ -32,7 +32,6 @@ class TemporaryVoice:
         await member.move_to(channel)
 
     async def on_voice_state_update(self, member, *_):
-        print('voice update')
         guild = member.guild
         if guild is None:
             return  # /shrug
@@ -65,6 +64,7 @@ class TemporaryVoice:
             await after.edit(name=before.name)
 
     @commands.command()
+    @commands.guild_only()
     @checks.mod_or_permissions(manage_channels=True)
     async def create_lobby(self, ctx):
         """Creates a temporary voice lobby."""
