@@ -13,8 +13,7 @@ class TemporaryVoice:
         self.config_default = {'channel': None, 'limit': 0}
         self.tracked_channels = set()
 
-    @staticmethod
-    def filter(channels):
+    def filter(self, channels):
         _channels = []
         for channel in channels:
             if channel.name.startswith('Temp: ') or channel.id in self.tracked_channels:
@@ -33,6 +32,7 @@ class TemporaryVoice:
         await member.move_to(channel)
 
     async def on_voice_state_update(self, member, *_):
+        print('voice update')
         guild = member.guild
         if guild is None:
             return  # /shrug
