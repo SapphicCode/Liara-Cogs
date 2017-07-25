@@ -1,17 +1,22 @@
-from discord.ext import commands
-from cogs.utils import checks
-from cogs.utils import dataIO
-import discord
 import asyncio
+
+import discord
+from discord.ext import commands
+
+from cogs.utils import checks
+from cogs.utils.storage import RedisDict
 
 
 class TemporaryVoice:
     """A cog to create TeamSpeak-like voice channels."""
     def __init__(self, liara):
         self.liara = liara
-        self.config = dataIO.load('pandentia.tempvoice')
+        self.config = RedisDict('pandentia.tempvoice', liara.redis)
         self.config_default = {'channel': None, 'limit': 0}
         self.tracked_channels = set()
+
+    def __unload(self):
+        self.config.close()
 
     def filter(self, channels):
         _channels = []
@@ -82,6 +87,7 @@ class TemporaryVoice:
                 self.config[ctx.guild.id] = config
             else:
                 self.config[ctx.guild.id]['channel'] = channel.id
+            self.config.commit(ctx.guild.id)
             await ctx.send('Channel created! You can rename it to whatever you want now.')
         except discord.Forbidden:
             await ctx.send('It would appear that I don\'t have permissions to create channels.')

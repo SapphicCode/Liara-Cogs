@@ -1,23 +1,26 @@
-from cogs.utils import checks
-from cogs.utils import dataIO
-from discord.ext import commands
-import discord
-import dateparser
-import datetime
 import asyncio
+import datetime
+
+import dateparser
+import discord
+from discord.ext import commands
+
+from cogs.utils import checks
+from cogs.utils.storage import RedisDict
 
 
 class TempBans:
     def __init__(self, liara):
         self.loaded = True
         self.liara = liara
-        self.banlist = dataIO.load('pandentia.tempbans')
+        self.banlist = RedisDict('pandentia.tempbans', liara.redis)
         if 'bans' not in self.banlist:
             self.banlist['bans'] = []
         self.task = self.liara.loop.create_task(self.unban_task())
 
     def __unload(self):
         self.loaded = False
+        self.banlist.close()
 
     async def get_user(self, uid):
         return self.liara.get_user(uid) or await self.liara.get_user_info(uid)
@@ -38,6 +41,7 @@ class TempBans:
                     pass
                 finally:
                     self.banlist['bans'].remove(ban)
+                    self.banlist.commit('bans')
                 await asyncio.sleep(0.05)
             await asyncio.sleep(5)
 
@@ -63,6 +67,7 @@ class TempBans:
         try:
             await member.ban(reason='Temporary ban: Banned by {} until {}.'.format(ctx.author, parsed))
             self.banlist['bans'].append({'time': parsed, 'member': member.id, 'guild': ctx.guild.id})
+            self.banlist.commit('bans')
         except discord.Forbidden:
             await ctx.send('I don\'t have permission to ban that person here.')
             return

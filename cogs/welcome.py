@@ -1,18 +1,20 @@
-from discord.ext import commands
-from cogs.utils import checks
-from cogs.utils import dataIO
 import asyncio
+
 import discord
+from discord.ext import commands
+
+from cogs.utils import checks
+from cogs.utils.storage import RedisDict
 
 
 class Welcome:
     def __init__(self, liara):
         self.liara = liara
-        self.welcome = dataIO.load('pandentia.welcome')
+        self.welcome = RedisDict('pandentia.welcome', liara.redis)
         self.disabled = False
 
     def __unload(self):
-        self.welcome.die = True
+        self.welcome.close()
 
     def check_for_guild(self, guild_id):
         if self.welcome.get(guild_id, {'status': False})['status']:
@@ -33,6 +35,7 @@ class Welcome:
         guild = str(ctx.message.guild.id)
         welcome_obj = {'status': True, 'channel': str(channel.id), 'message': message}
         self.welcome[guild] = welcome_obj
+        self.welcome.commit(guild)
         await ctx.send('Welcome message set.')
 
     @commands.command()
@@ -42,6 +45,7 @@ class Welcome:
         guild = str(ctx.message.guild.id)
         if self.check_for_guild(guild):
             self.welcome.pop(guild)
+            self.welcome.commit(guild)
             await ctx.send('Welcome message cleared.')
         else:
             await ctx.send('This server doesn\'t have a welcome message.')
@@ -56,11 +60,13 @@ class Welcome:
         channel = self.liara.get_channel(int(self.welcome[guild]['channel']))
         if channel is None:
             self.welcome.pop(guild)
+            self.welcome.commit(guild)
             return
         permissions = channel.permissions_for(member.guild.me)
         message = self.welcome[guild]['message'].replace('%m', member.mention).replace('%n', member.name)
         if not permissions.send_messages:
             self.welcome.pop(guild)
+            self.welcome.commit(guild)
             return
         elif not permissions.embed_links:
             await self.liara.send_message(channel, message)
